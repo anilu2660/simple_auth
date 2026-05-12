@@ -1,0 +1,787 @@
+/* ============================================================
+   AuthVault — main.css
+   Dark glassmorphism + aurora gradient theme
+   ============================================================ */
+
+/* ---------- Google Fonts Import Fallback ---------- */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+/* ---------- CSS Custom Properties ---------- */
+:root {
+  --bg-deep:       #050714;
+  --bg-mid:        #0a0e27;
+  --glass-bg:      rgba(12, 16, 40, 0.65);
+  --glass-border:  rgba(120, 100, 255, 0.18);
+  --glass-shine:   rgba(255, 255, 255, 0.04);
+
+  --accent-1:      #7c5cff;   /* violet */
+  --accent-2:      #a259ff;   /* purple */
+  --accent-3:      #38bdf8;   /* sky */
+  --accent-grad:   linear-gradient(135deg, #7c5cff 0%, #a259ff 50%, #38bdf8 100%);
+
+  --text-primary:  #f0eeff;
+  --text-secondary:#9d9bbf;
+  --text-muted:    #5a5880;
+
+  --success:       #22d3a0;
+  --error:         #ff5f6d;
+  --warning:       #fbbf24;
+  --info:          #38bdf8;
+
+  --radius-card:   24px;
+  --radius-input:  14px;
+  --radius-btn:    14px;
+
+  --transition:    0.35s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-fast: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+
+  --font-sans:     'Inter', 'Space Grotesk', system-ui, sans-serif;
+  --font-head:     'Space Grotesk', 'Inter', system-ui, sans-serif;
+
+  --shadow-card:   0 32px 80px rgba(0, 0, 0, 0.55),
+                   0 0 0 1px var(--glass-border),
+                   inset 0 1px 0 var(--glass-shine);
+  --shadow-btn:    0 8px 32px rgba(124, 92, 255, 0.45);
+  --shadow-input:  0 0 0 2px rgba(124, 92, 255, 0.55);
+}
+
+/* ---------- Reset ---------- */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-sans);
+  background-color: var(--bg-deep);
+  color: var(--text-primary);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ---------- Canvas Background ---------- */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---------- Floating Orbs ---------- */
+.orb {
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(90px);
+  pointer-events: none;
+  z-index: 0;
+  animation: orbFloat 12s ease-in-out infinite alternate;
+}
+
+.orb-1 {
+  width: 500px; height: 500px;
+  background: radial-gradient(circle, rgba(124,92,255,0.25) 0%, transparent 70%);
+  top: -150px; left: -120px;
+  animation-duration: 14s;
+}
+
+.orb-2 {
+  width: 420px; height: 420px;
+  background: radial-gradient(circle, rgba(56,189,248,0.2) 0%, transparent 70%);
+  bottom: -120px; right: -100px;
+  animation-duration: 10s;
+  animation-delay: -4s;
+}
+
+.orb-3 {
+  width: 280px; height: 280px;
+  background: radial-gradient(circle, rgba(162,89,255,0.18) 0%, transparent 70%);
+  top: 40%; right: 15%;
+  animation-duration: 16s;
+  animation-delay: -8s;
+}
+
+@keyframes orbFloat {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(30px, 20px) scale(1.05); }
+  100% { transform: translate(-20px, 35px) scale(0.97); }
+}
+
+/* ---------- Auth Wrapper ---------- */
+.auth-wrapper {
+  position: relative;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 40px 16px;
+  width: 100%;
+  margin: auto;
+}
+
+/* ---------- Auth Card ---------- */
+.auth-card {
+  width: 100%;
+  max-width: 440px;
+  background: var(--glass-bg);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-card);
+  border: 1px solid var(--glass-border);
+  padding: 36px 40px 32px;
+  /* NOTE: overflow:hidden alone doesn't clip children reliably with backdrop-filter.
+     Clipping is handled by .slider-viewport below. */
+  animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardEntrance {
+  from { opacity: 0; transform: translateY(40px) scale(0.96); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* ---------- Brand ---------- */
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+
+.brand-icon {
+  width: 44px; height: 44px;
+  background: var(--accent-grad);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  box-shadow: 0 6px 20px rgba(124, 92, 255, 0.5);
+  flex-shrink: 0;
+}
+
+.brand-name {
+  font-family: var(--font-head);
+  font-size: 1.45rem;
+  font-weight: 700;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: -0.02em;
+}
+
+/* ---------- Tab Switcher ---------- */
+.tab-switcher {
+  position: relative;
+  display: flex;
+  background: rgba(255,255,255,0.05);
+  border-radius: 12px;
+  padding: 4px;
+  margin-bottom: 32px;
+  gap: 0;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 9px 0;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-sans);
+  font-size: 0.9rem;
+  font-weight: 600;
+  border-radius: 9px;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: color var(--transition-fast);
+  letter-spacing: 0.01em;
+}
+
+.tab-btn.active {
+  color: var(--text-primary);
+}
+
+.tab-indicator {
+  position: absolute;
+  top: 4px; bottom: 4px;
+  left: 4px;
+  width: calc(50% - 4px);
+  background: linear-gradient(135deg, rgba(124,92,255,0.4), rgba(56,189,248,0.2));
+  border-radius: 9px;
+  border: 1px solid rgba(124,92,255,0.3);
+  transition: transform var(--transition);
+  z-index: 1;
+  box-shadow: 0 4px 16px rgba(124,92,255,0.25);
+}
+
+.tab-indicator.right {
+  transform: translateX(100%);
+}
+
+/* ---------- Forms Slider ---------- */
+/* Viewport clips the 200%-wide slider strip — this is the critical overflow container */
+.slider-viewport {
+  width: 100%;
+  overflow: hidden;
+  /* isolate from backdrop-filter stacking context */
+  position: relative;
+  z-index: 0;
+  transition: height var(--transition);
+}
+
+.forms-slider {
+  display: flex;
+  align-items: flex-start; /* Prevents panels from stretching to max height */
+  width: 200%;          /* two panels side by side */
+  transition: transform var(--transition);
+  will-change: transform;
+}
+
+.forms-slider.show-signup {
+  transform: translateX(-50%);
+}
+
+.form-panel {
+  width: 50%;           /* each panel = 100% of the card */
+  flex-shrink: 0;
+  min-width: 0;
+  /* pad right so content doesn't butt against the hidden panel */
+  padding-right: 1px;
+}
+
+/* ---------- Form Typography ---------- */
+.form-title {
+  font-family: var(--font-head);
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: -0.025em;
+  margin-bottom: 6px;
+}
+
+.form-subtitle {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+
+/* ---------- Input Groups ---------- */
+.input-group {
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-muted);
+  transition: color var(--transition-fast);
+  pointer-events: none;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+}
+
+.input-field {
+  width: 100%;
+  padding: 16px 46px 16px 44px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: var(--radius-input);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  font-weight: 400;
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast), background var(--transition-fast);
+  position: relative;
+}
+
+.input-field::placeholder {
+  color: transparent;
+}
+
+/* Floating Label */
+.floating-label {
+  position: absolute;
+  left: 44px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition: all var(--transition-fast);
+  background: transparent;
+  padding: 0 4px;
+  transform-origin: left top;
+  z-index: 2;
+}
+
+/* Float up when input has value or is focused */
+.input-field:focus ~ .floating-label,
+.input-field:not(:placeholder-shown) ~ .floating-label {
+  top: 0;
+  transform: translateY(-50%) scale(0.8);
+  color: var(--accent-1);
+  background: var(--bg-mid);
+  border-radius: 4px;
+}
+
+.input-field:focus {
+  border-color: var(--accent-1);
+  box-shadow: var(--shadow-input);
+  background: rgba(124,92,255,0.05);
+}
+
+.input-field:focus ~ .input-icon,
+.input-field:focus + .input-icon {
+  color: var(--accent-1);
+}
+
+/* Make icon change color on focus using sibling selector workaround */
+.input-group:focus-within .input-icon {
+  color: var(--accent-1);
+}
+
+/* Toggle Password Button */
+.toggle-pass {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  transition: color var(--transition-fast);
+  z-index: 3;
+}
+
+.toggle-pass:hover {
+  color: var(--accent-1);
+}
+
+/* Input Error */
+.input-error {
+  display: block;
+  font-size: 0.77rem;
+  color: var(--error);
+  margin-top: 5px;
+  padding-left: 4px;
+  height: 0;
+  overflow: hidden;
+  transition: height var(--transition-fast), opacity var(--transition-fast);
+  opacity: 0;
+}
+
+.input-error.visible {
+  height: 18px;
+  opacity: 1;
+}
+
+/* Input valid state */
+.input-field.valid {
+  border-color: var(--success);
+}
+
+.input-field.invalid {
+  border-color: var(--error);
+  box-shadow: 0 0 0 2px rgba(255, 95, 109, 0.3);
+}
+
+/* ---------- Password Strength ---------- */
+.strength-bar-wrap {
+  height: 4px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 4px;
+  margin: -10px 0 6px;
+  overflow: hidden;
+}
+
+.strength-bar {
+  height: 100%;
+  width: 0%;
+  border-radius: 4px;
+  transition: width 0.4s ease, background 0.4s ease;
+}
+
+.strength-label {
+  font-size: 0.76rem;
+  margin-bottom: 14px;
+  padding-left: 2px;
+  font-weight: 500;
+  min-height: 18px;
+}
+
+/* ---------- Remember Me / Checkbox ---------- */
+.form-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 24px;
+}
+
+.remember-me {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  user-select: none;
+}
+
+.remember-me input[type="checkbox"] {
+  display: none;
+}
+
+.checkmark {
+  width: 18px; height: 18px;
+  border: 1.5px solid rgba(255,255,255,0.2);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+  position: relative;
+}
+
+.remember-me input:checked + .checkmark {
+  background: var(--accent-1);
+  border-color: var(--accent-1);
+}
+
+.remember-me input:checked + .checkmark::after {
+  content: '';
+  width: 5px; height: 9px;
+  border: 2px solid white;
+  border-left: none;
+  border-top: none;
+  transform: rotate(45deg) translate(-1px, -1px);
+  display: block;
+}
+
+.forgot-link {
+  font-size: 0.85rem;
+  color: var(--accent-1);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color var(--transition-fast), opacity var(--transition-fast);
+}
+
+.forgot-link:hover {
+  color: var(--accent-2);
+  opacity: 0.9;
+}
+
+/* ---------- Terms Check ---------- */
+.terms-check {
+  margin-bottom: 24px;
+  font-size: 0.85rem;
+}
+
+.terms-check a {
+  color: var(--accent-1);
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.terms-check a:hover {
+  color: var(--accent-2);
+}
+
+/* ---------- Submit Button ---------- */
+.submit-btn {
+  width: 100%;
+  padding: 15px 24px;
+  background: var(--accent-grad);
+  border: none;
+  border-radius: var(--radius-btn);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  letter-spacing: 0.01em;
+  position: relative;
+  overflow: hidden;
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), opacity var(--transition-fast);
+  box-shadow: var(--shadow-btn);
+}
+
+.submit-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+  opacity: 0;
+  transition: opacity var(--transition-fast);
+}
+
+.submit-btn:hover::before {
+  opacity: 1;
+}
+
+.submit-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(124, 92, 255, 0.6);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-btn);
+}
+
+.submit-btn:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Ripple effect */
+.submit-btn .ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  transform: scale(0);
+  animation: rippleAnim 0.6s linear;
+  pointer-events: none;
+}
+
+@keyframes rippleAnim {
+  to { transform: scale(4); opacity: 0; }
+}
+
+.btn-text { position: relative; z-index: 1; }
+
+.btn-arrow {
+  position: relative; z-index: 1;
+  transition: transform var(--transition-fast);
+  flex-shrink: 0;
+}
+
+.submit-btn:hover .btn-arrow {
+  transform: translateX(4px);
+}
+
+/* Loading Spinner */
+.btn-spinner {
+  display: none;
+  width: 20px; height: 20px;
+  border: 2.5px solid rgba(255,255,255,0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+  position: relative; z-index: 1;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.submit-btn.loading .btn-spinner { display: block; }
+.submit-btn.loading .btn-arrow  { display: none; }
+.submit-btn.loading .btn-text   { opacity: 0.7; }
+
+/* ---------- Form Switch Text ---------- */
+.form-switch-text {
+  text-align: center;
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  margin-top: 20px;
+}
+
+.form-switch-text a {
+  color: var(--accent-1);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color var(--transition-fast);
+}
+
+.form-switch-text a:hover {
+  color: var(--accent-2);
+}
+
+/* ---------- Footer Tagline ---------- */
+.footer-tagline {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  letter-spacing: 0.01em;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  animation: cardEntrance 1s 0.3s both;
+}
+
+.footer-tagline::before {
+  content: '🔒';
+  font-size: 0.85em;
+}
+
+/* ---------- Toast Notifications ---------- */
+.toast-container {
+  position: fixed;
+  top: 24px;
+  right: 24px;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-radius: 14px;
+  background: rgba(15, 18, 45, 0.92);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: 0 16px 40px rgba(0,0,0,0.5);
+  pointer-events: auto;
+  min-width: 280px;
+  max-width: 360px;
+  animation: toastIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+.toast.hide {
+  animation: toastOut 0.35s ease-in both;
+}
+
+.toast-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.toast.success .toast-dot { background: var(--success); box-shadow: 0 0 8px var(--success); }
+.toast.error   .toast-dot { background: var(--error);   box-shadow: 0 0 8px var(--error); }
+.toast.info    .toast-dot { background: var(--info);    box-shadow: 0 0 8px var(--info); }
+.toast.warning .toast-dot { background: var(--warning); box-shadow: 0 0 8px var(--warning); }
+
+@keyframes toastIn {
+  from { opacity: 0; transform: translateX(60px) scale(0.9); }
+  to   { opacity: 1; transform: translateX(0) scale(1); }
+}
+
+@keyframes toastOut {
+  from { opacity: 1; transform: translateX(0); }
+  to   { opacity: 0; transform: translateX(60px); }
+}
+
+/* ---------- Success State on Card ---------- */
+.auth-card.success-flash {
+  animation: successFlash 0.6s ease;
+}
+
+@keyframes successFlash {
+  0%   { box-shadow: var(--shadow-card); }
+  50%  { box-shadow: 0 0 60px rgba(34, 211, 160, 0.4), 0 32px 80px rgba(0,0,0,0.55); }
+  100% { box-shadow: var(--shadow-card); }
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: rgba(124,92,255,0.4); border-radius: 4px; }
+
+/* ---------- Selection ---------- */
+::selection {
+  background: rgba(124,92,255,0.35);
+  color: var(--text-primary);
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  .auth-card {
+    padding: 28px 22px 24px;
+    border-radius: 20px;
+  }
+
+  .form-title { font-size: 1.35rem; }
+
+  .toast-container {
+    top: 12px; right: 12px; left: 12px;
+  }
+
+  .toast { min-width: unset; width: 100%; }
+}
+
+@media (max-width: 360px) {
+  .auth-card { padding: 22px 16px 20px; }
+  .brand-name { font-size: 1.2rem; }
+}
+
+/* ---------- Two-Column Input Row ---------- */
+.input-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.input-row .input-group {
+  margin-bottom: 0;
+}
+
+/* ---------- Select / Dropdown ---------- */
+.select-field {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+  padding-right: 36px; /* space for arrow */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%239d9bbf' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+}
+
+.select-field option {
+  background: #0d1035;
+  color: var(--text-primary);
+  padding: 8px;
+}
+
+/* Float label up when select has a chosen (non-empty) value */
+.select-field:not([value=""]):valid ~ .floating-label,
+.select-field.has-value ~ .floating-label,
+.floating-label.select-label.floated {
+  top: 0;
+  transform: translateY(-50%) scale(0.8);
+  color: var(--accent-1);
+  background: var(--bg-mid);
+  border-radius: 4px;
+}
+
+/* ---------- Responsive: stack columns on small screens ---------- */
+@media (max-width: 400px) {
+  .input-row {
+    grid-template-columns: 1fr;
+  }
+}

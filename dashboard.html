@@ -1,0 +1,322 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AuthVault — Dashboard</title>
+    <meta name="description" content="User Dashboard" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="main.css" />
+    <style>
+      .dashboard-card {
+        width: 100%;
+        max-width: 600px;
+        background: var(--glass-bg);
+        backdrop-filter: blur(28px) saturate(180%);
+        -webkit-backdrop-filter: blur(28px) saturate(180%);
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-card);
+        border: 1px solid var(--glass-border);
+        padding: 40px;
+        animation: cardEntrance 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+      }
+      
+      .profile-header {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 30px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: var(--accent-grad);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--font-head);
+        font-size: 2rem;
+        font-weight: 700;
+        color: white;
+        box-shadow: 0 8px 24px rgba(124, 92, 255, 0.4);
+      }
+
+      .profile-title {
+        font-family: var(--font-head);
+        font-size: 1.8rem;
+        font-weight: 700;
+        margin-bottom: 4px;
+        background: var(--accent-grad);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+      }
+
+      .profile-subtitle {
+        color: var(--text-secondary);
+        font-size: 0.95rem;
+      }
+
+      .info-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        margin-bottom: 30px;
+      }
+
+      .info-item {
+        background: rgba(255, 255, 255, 0.03);
+        border: 1px solid rgba(255, 255, 255, 0.06);
+        border-radius: 12px;
+        padding: 16px;
+        transition: transform var(--transition-fast), background var(--transition-fast);
+      }
+
+      .info-item:hover {
+        transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.05);
+      }
+
+      .info-label {
+        font-size: 0.8rem;
+        color: var(--text-muted);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        margin-bottom: 6px;
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      
+      .info-label svg {
+        color: var(--accent-1);
+      }
+
+      .info-value {
+        font-size: 1.05rem;
+        color: var(--text-primary);
+        font-weight: 500;
+        word-break: break-word;
+      }
+
+      .logout-btn {
+        width: 100%;
+        padding: 14px;
+        background: rgba(255, 95, 109, 0.1);
+        border: 1px solid rgba(255, 95, 109, 0.3);
+        border-radius: var(--radius-btn);
+        color: #ff8c95;
+        font-family: var(--font-sans);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all var(--transition-fast);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+      }
+
+      .logout-btn:hover {
+        background: rgba(255, 95, 109, 0.2);
+        color: #fff;
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(255, 95, 109, 0.2);
+      }
+      
+      @media (max-width: 480px) {
+        .info-grid {
+          grid-template-columns: 1fr;
+        }
+        .dashboard-card {
+          padding: 30px 20px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Animated Canvas Background -->
+    <canvas id="bgCanvas"></canvas>
+
+    <!-- Floating Orbs -->
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+
+    <div class="auth-wrapper">
+      <div class="dashboard-card">
+        
+        <div class="profile-header">
+          <div class="avatar" id="userInitials">--</div>
+          <div>
+            <h1 class="profile-title" id="userName">Welcome</h1>
+            <p class="profile-subtitle" id="userEmail">loading...</p>
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <div class="info-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32 1.41 1.41M2 12h2m16 0h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
+              Gender
+            </div>
+            <div class="info-value" id="userGender">Not provided</div>
+          </div>
+          
+          <div class="info-item">
+            <div class="info-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+              Age
+            </div>
+            <div class="info-value" id="userAge">Not provided</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+              City
+            </div>
+            <div class="info-value" id="userCity">Not provided</div>
+          </div>
+
+          <div class="info-item">
+            <div class="info-label">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+              Mobile
+            </div>
+            <div class="info-value" id="userMobile">Not provided</div>
+          </div>
+        </div>
+
+        <button class="logout-btn" onclick="logout()">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+          Sign Out
+        </button>
+
+      </div>
+    </div>
+
+    <script>
+      // ─── Canvas Background (reused from main.js) ─────────────
+      (function initCanvas() {
+        const canvas = document.getElementById('bgCanvas');
+        const ctx    = canvas.getContext('2d');
+        let W, H, particles = [];
+
+        function resize() {
+          W = canvas.width  = window.innerWidth;
+          H = canvas.height = window.innerHeight;
+        }
+
+        class Particle {
+          constructor() { this.reset(); }
+          reset() {
+            this.x     = Math.random() * W;
+            this.y     = Math.random() * H;
+            this.r     = Math.random() * 1.5 + 0.4;
+            this.vx    = (Math.random() - 0.5) * 0.3;
+            this.vy    = (Math.random() - 0.5) * 0.3;
+            this.alpha = Math.random() * 0.5 + 0.1;
+            this.color = Math.random() > 0.5 ? '124,92,255' : '56,189,248';
+          }
+          update() {
+            this.x += this.vx;
+            this.y += this.vy;
+            if (this.x < 0 || this.x > W || this.y < 0 || this.y > H) this.reset();
+          }
+          draw() {
+            ctx.beginPath();
+            ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+            ctx.fillStyle = `rgba(${this.color}, ${this.alpha})`;
+            ctx.fill();
+          }
+        }
+
+        function initParticles() {
+          const count = Math.floor((W * H) / 12000);
+          particles = Array.from({ length: count }, () => new Particle());
+        }
+
+        function drawLines() {
+          for (let i = 0; i < particles.length; i++) {
+            for (let j = i + 1; j < particles.length; j++) {
+              const dx   = particles[i].x - particles[j].x;
+              const dy   = particles[i].y - particles[j].y;
+              const dist = Math.sqrt(dx * dx + dy * dy);
+              if (dist < 110) {
+                ctx.beginPath();
+                ctx.moveTo(particles[i].x, particles[i].y);
+                ctx.lineTo(particles[j].x, particles[j].y);
+                ctx.strokeStyle = `rgba(124,92,255,${0.06 * (1 - dist / 110)})`;
+                ctx.lineWidth   = 0.8;
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        function loop() {
+          ctx.clearRect(0, 0, W, H);
+          particles.forEach(p => { p.update(); p.draw(); });
+          drawLines();
+          requestAnimationFrame(loop);
+        }
+
+        resize();
+        initParticles();
+        loop();
+        window.addEventListener('resize', () => { resize(); initParticles(); });
+      })();
+
+      // ─── Dashboard Logic ──────────────────────────────────────
+      function checkAuth() {
+        const token = localStorage.getItem('authToken');
+        const userStr = localStorage.getItem('authUser');
+
+        if (!token || !userStr) {
+          // Not logged in, redirect to main
+          window.location.href = 'main.html';
+          return;
+        }
+
+        try {
+          const user = JSON.parse(userStr);
+          
+          // Populate UI
+          document.getElementById('userName').textContent = user.name || 'User';
+          document.getElementById('userEmail').textContent = user.email || '';
+          
+          // Generate initials
+          const initials = (user.name || 'U').split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+          document.getElementById('userInitials').textContent = initials;
+
+          // Set other fields, fallback to 'Not provided' if empty
+          document.getElementById('userGender').textContent = user.gender || 'Not provided';
+          document.getElementById('userAge').textContent = user.age || 'Not provided';
+          document.getElementById('userCity').textContent = user.city || 'Not provided';
+          document.getElementById('userMobile').textContent = user.mobile || 'Not provided';
+
+        } catch (e) {
+          console.error('Error parsing user data:', e);
+          logout();
+        }
+      }
+
+      function logout() {
+        localStorage.removeItem('authToken');
+        localStorage.removeItem('authUser');
+        window.location.href = 'main.html';
+      }
+
+      // Run check on load
+      checkAuth();
+    </script>
+  </body>
+</html>
